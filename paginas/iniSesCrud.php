@@ -20,14 +20,21 @@ if (isset($_COOKIE["session"]) && $_COOKIE["session"] === "activa") {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="../css/bootstrap.min.css">
-        <link rel="stylesheet" href="../css/fondologs.css">
+        <link rel="stylesheet" href="../css/fondocool.css" />
     </header>
     <body>
-        <div class="cointainer mt-3 p-3 w-5">
-            <img src="../grafico/elEsfuerzo.png" class="rounded mx-auto d-block" style="max-width:10%">
+        <div class="container-fluid">
+            <div class="row justify-content-start pt-4 ps-4">
+                <div class="col-auto d-flex align-items-center">
+                    <img src="../imgs/logo.png" style="max-width:150px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="title">
+            <h1 class="text-center p-3 text-white">Ingrese sus credenciales</h1>
         </div>
         <div class="container mt-3 p-3 w-25 bg-white border rounded">
-            <h1 class="text-center p-3">bienvenido usuario!</h1>
             <form method="POST" action="validar.php"><br>
                 <div class="mb-3">
                     <label for=usuario class="input-label">Nombre de usuario</label>
@@ -41,8 +48,16 @@ if (isset($_COOKIE["session"]) && $_COOKIE["session"] === "activa") {
                     <input type="checkbox" name="recuerdame">
                     <label>recuérdame</label>
                 </div>
-                <input type="submit" value="iniciar sesión"><br>
+                <input class="btn btn-primary" type="submit" value="iniciar sesión"><br>
             </form>
+            <div class="card-footer bg-light m-3">
+                <small>
+                    Nuevo operador?
+                    <a href="registro.php">Regístrate!</a><br>
+                    <a href="olvido.php">Olvidaste la contraseña?</a>
+                </small>
+            </div>
         </div>
+        
     </body>
 </html>

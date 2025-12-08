@@ -1,0 +1,61 @@
+CREATE DATABASE libreria_la_ruina;
+
+use libreria_la_ruina;
+
+create table usrs_ruina (cve_usuarios varchar(36) DEFAULT uuid_v7() not null primary key, usr_name varchar(20) unique not null, pswrd varchar(255) not null, rol varchar(6));
+
+create table categorias_libros (id_categoria int not null primary key AUTO_INCREMENT, categoria varchar(15));
+
+create table libros (
+id_libro varchar(36) DEFAULT uuid_v7() not null primary key,
+titulo varchar(64),
+autor varchar(25),
+precio float(6,2),
+id_categoria1 int,
+idioma varchar (15),
+stock int,
+CONSTRAINT fk_categoria FOREIGN KEY (id_categoria1)
+references categorias_libros(id_categoria)
+);
+
+
+INSERT INTO categorias_libros (categoria) VALUES
+('Ficción'),
+('No Ficción'),
+('Fantasía'),
+('Ciencia'),
+('Historia'),
+('Infantil'),
+('Misterio'),
+('Romance'),
+('Terror'),
+('Autoayuda');
+
+select * from categorias_libros;
+
+INSERT INTO libros (titulo, autor, precio, id_categoria1, idioma, stock) VALUES
+('Cien Años de Soledad', 'G. García Márquez', 299.00, 1, 'Español', 12),
+('El Principito', 'A. de Saint-Exupéry', 159.00, 6, 'Español', 20),
+('1984', 'George Orwell', 220.50, 1, 'Inglés', 15),
+('Breves respuestas a las grandes preguntas', 'S. Hawking', 350.00, 4, 'Español', 8),
+('La Sombra del Viento', 'Carlos Ruiz Zafón', 280.00, 7, 'Español', 10),
+('Orgullo y Prejuicio', 'Jane Austen', 199.00, 8, 'Inglés', 14),
+('It', 'Stephen King', 330.00, 9, 'Español', 9),
+('Hábitos Atómicos', 'James Clear', 270.00, 10, 'Español', 25),
+('El Hobbit', 'J.R.R. Tolkien', 240.00, 3, 'Español', 13),
+('Juego de Tronos', 'G. R. R. Martin', 450.00, 3, 'Español', 7),
+('Sapiens: De animales a dioses', 'Y. N. Harari', 380.00, 2, 'Español', 11),
+('El Diario de Ana Frank', 'Ana Frank', 180.00, 5, 'Español', 18),
+('Harry Potter y la Piedra Filosofal', 'J.K. Rowling', 230.00, 3, 'Español', 21),
+('El Código Da Vinci', 'Dan Brown', 260.00, 7, 'Español', 14),
+('Drácula', 'Bram Stoker', 200.00, 9, 'Inglés', 10),
+('El Alquimista', 'Paulo Coelho', 210.00, 1, 'Español', 17),
+('La Tregua', 'Mario Benedetti', 175.00, 1, 'Español', 16),
+('Don Quijote de la Mancha', 'Miguel de Cervantes', 300.00, 1, 'Español', 6),
+('El Monje que Vendió su Ferrari', 'Robin Sharma', 260.00, 10, 'Español', 12),
+('Las Aventuras de Tom Sawyer', 'Mark Twain', 150.00, 6, 'Español', 15);
+
+select * from libros;
+SELECT libros.id_libro, libros.titulo, libros.autor, libros.precio, categorias_libros.categoria AS nombre_categoria, libros.idioma, libros.stock FROM libros join categorias_libros on libros.id_categoria1 = categorias_libros.id_categoria;
+
+insert into table libros (titulo, autor, precio, id_categoria1)

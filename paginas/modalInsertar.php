@@ -1,5 +1,5 @@
 <?php
-$categorias = seleccionar("SELECT id_categoria, categoria FROM categorias", "localhost", "el_esfuerzo", "root", "password");
+$categorias = seleccionar("SELECT id_categoria, categoria FROM categorias_libros", "localhost", "libreria_la_ruina", "root", "password");
 ?>
 
 <!-- Modal -->
@@ -13,8 +13,13 @@ $categorias = seleccionar("SELECT id_categoria, categoria FROM categorias", "loc
       <div class="modal-body">
          <form method="post", action="guardar.php">
             <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" name="nombre" class="form-control" required>
+                <label for="titulo" class="form-label">Titulo</label>
+                <input type="text" name="titulo" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="autor" class="form-label">Autor</label>
+                <input type="text" name="autor" class="form-control" required>
             </div>
 
             <div class="mb-3">
@@ -33,8 +38,13 @@ $categorias = seleccionar("SELECT id_categoria, categoria FROM categorias", "loc
             </div>
 
             <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción</label>
-                <input type="text" name="descripcion" class="form-control" required>
+                <label for="idioma" class="form-label">Idioma</label>
+                <input type="text" name="idioma" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="stock" class="form-label">En existencia</label>
+                <input type="number" name="stock" class="form-control" required>
             </div>
 
             <div>
