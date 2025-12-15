@@ -29,7 +29,7 @@ if (count($usuarios) > 0) {
             setcookie("usuario", $user["1"], time() + 60 * 5);
         }
 
-        header("Location: iniciocrud.php");
+        header("Location: index.php");
         exit();
     } else {
         echo "error de usuario o contraseña<br><a href='iniSesCrud.php'>Regresar</a>";

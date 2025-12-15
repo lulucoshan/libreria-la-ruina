@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["id"])){
-    header("Location: iniciocrud.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -9,7 +9,7 @@ if (isset($_COOKIE["session"]) && $_COOKIE["session"] === "activa") {
     $_SESSION["id"] = 1;
     $_SESSION["usuario"] = $_COOKIE["usuario"];
     setcookie("session", "activa", time() + 60);
-    header("Location: iniciocrud.php");
+    header("Location: index.php");
     exit();
 }
 ?>
