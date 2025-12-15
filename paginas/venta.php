@@ -1,15 +1,15 @@
 <?php
-// Datos simulados (PHP)
-$libros = [
-    ["id" => 1, "titulo" => "libro 1", "desc" => "lorem ipsum"],
-    ["id" => 2, "titulo" => "libro 2", "desc" => "ipsum ipsum"],
-    ["id" => 3, "titulo" => "libro 3", "desc" => "blah blah"],
-    ["id" => 4, "titulo" => "libro 4", "desc" => "blah"],
-    ["id" => 5, "titulo" => "libro 1", "desc" => "lorem ipsum"],
-    ["id" => 6, "titulo" => "libro 2", "desc" => "ipsum ipsum"],
-    ["id" => 7, "titulo" => "libro 3", "desc" => "blah blah"],
-    ["id" => 8, "titulo" => "libro 4", "desc" => "blah"],
-];
+
+session_start();
+if(!isset($_SESSION["id"])){
+  header("Location: iniSesCrud.php");
+  exit();
+}
+
+require_once "../config/neobasededatos.php";
+include "modalCarrito.php";
+
+$libros = seleccionar("SELECT id_libro, titulo, autor, precio from libros where stock > 0");
 ?>
 
 <!DOCTYPE html>
@@ -17,93 +17,14 @@ $libros = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema P.O.S - Local</title>
+    <title>Sistema P.O.S - realizar venta</title>
     
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/fondocool.css" />
 
-    <style>
-        /* ESTILOS PERSONALIZADOS (Lo que Bootstrap no hace por defecto) */
-        body {
-            background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
-            min-height: 100vh;
-        }
 
-        /* Navbar personalizada para parecerse a la imagen */
-        .navbar {
-            background-color: #f8f9fa;
-            border-bottom: 3px solid #dee2e6;
-            padding: 0.5rem 1rem;
-        }
-
-        .logo-box {
-            background-color: #e1c340;
-            color: white;
-            padding: 5px 10px;
-            font-weight: bold;
-            border-radius: 4px;
-            margin-right: 10px;
-        }
-
-        .brand-text small {
-            color: #6c7ae0;
-            font-size: 0.75rem;
-            display: block;
-            margin-top: -5px;
-        }
-
-        /* Estilo de las tarjetas (Cards) */
-        .custom-card {
-            background-color: #dfbf43; /* Amarillo Mostaza */
-            border: none;
-            color: white;
-            transition: transform 0.2s;
-            height: 280px;
-            cursor: pointer;
-        }
-
-        .custom-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        /* Input de búsqueda estilo Bootstrap pero personalizado */
-        .search-container {
-            position: relative;
-            max-width: 300px;
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
-            z-index: 5;
-        }
-
-        .form-control-search {
-            padding-left: 35px; /* Espacio para el icono */
-            background-color: #ecf0f1;
-            border: none;
-        }
-
-        /* SVG Placeholder */
-        .placeholder-svg {
-            width: 100px;
-            height: 80px;
-            fill: #4b6a82;
-        }
-        
-        .card-img-area {
-            flex-grow: 1;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
 
@@ -139,10 +60,10 @@ $libros = [
             </div>
             <div class="col-md-6 d-flex justify-content-md-end align-items-center gap-3 mt-3 mt-md-0">
                 <div class="search-container flex-grow-1 flex-md-grow-0">
-                    <i class="fas fa-search search-icon"></i>
+                    <i class="fas fa-search search-icon"></i><br>
                     <input type="text" class="form-control form-control-search" id="searchInput" placeholder="Search..." onkeyup="filterBooks()">
                 </div>
-                <i class="fas fa-cart-plus text-white fs-2 cursor-pointer"></i>
+                <i class="fas fa-cart-plus text-white fs-2 cursor-pointer" data-bs-toggle="modal" data-bs-target="#modalCarrito"></i>
             </div>
         </div>
 
@@ -151,14 +72,18 @@ $libros = [
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 book-item"> 
                     <div class="card custom-card h-100 p-3">
                         <h5 class="card-title book-title"><?php echo $libro['titulo']; ?></h5>
-                        <p class="card-text small op-75"><?php echo $libro['desc']; ?></p>
+                        <p class="card-text small op-75"><?php echo $libro['autor']; ?></p>
                         
                         <div class="card-img-area">
-                            <svg class="placeholder-svg" viewBox="0 0 24 24">
-                                <circle cx="18" cy="6" r="3" fill="#4b6a82"/>
-                                <path d="M1 18 L8 10 L14 16 L23 18 V20 H1 Z" fill="#4b6a82"/>
-                                <path d="M10 18 L16 12 L23 19" fill="#4b6a82"/>
-                            </svg>
+                            <img src="../uploads/portadas/<?php echo $libro['titulo']; ?>.webp"
+                            onerror="this.onerror=null;this.src='../imgs/placeholder.jpg';"
+                            class="img-fluid rounded"
+                            style="max-height:180px; object-fit:contain;">
+                            <button
+                                class="btn btn-primary btn-sm mt-2 btn-add-cart"
+                                onclick="agregarLibro('<?php echo $libro['id_libro']; ?>', '<?php echo addslashes($libro['titulo']); ?>', <?php echo $libro['precio']; ?>)">
+                                <i class="fas fa-cart-plus"></i> Agregar
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -167,6 +92,7 @@ $libros = [
     </div>
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/carrito.js"></script>
 
     <script>
         function filterBooks() {

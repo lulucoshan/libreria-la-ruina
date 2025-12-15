@@ -1,7 +1,3 @@
-<?php
-$categorias = seleccionar("SELECT id_categoria, categoria FROM categorias", "localhost", "el_esfuerzo", "root", "password");
-?>
-
 <!-- Modal -->
 <div class="modal fade" id="modalBorrar" tabindex="-1" aria-labelledby="modalBorrarLabel" aria-hidden="true">
   <div class="modal-dialog">

@@ -1,5 +1,5 @@
 <?php
-$categorias = seleccionar("SELECT id_categoria, categoria FROM categorias_libros", "localhost", "libreria_la_ruina", "root", "password");
+$categorias = seleccionar("SELECT id_categoria, categoria FROM categorias_libros");
 ?>
 
 <!-- Modal -->
@@ -11,7 +11,7 @@ $categorias = seleccionar("SELECT id_categoria, categoria FROM categorias_libros
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-         <form method="post", action="guardar.php">
+         <form method="post", action="guardar.php" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="titulo" class="form-label">Titulo</label>
                 <input type="text" name="titulo" class="form-control" required>
@@ -32,7 +32,7 @@ $categorias = seleccionar("SELECT id_categoria, categoria FROM categorias_libros
                 <select name="categoria" class="form-select" required>
                     <option value=""> seleccionar... </option>
                     <?php foreach ($categorias as $categoria): ?>
-                        <option value="<?php echo $categoria[0]; ?>"><?php echo $categoria[1]; ?></option>
+                        <option value="<?php echo $categoria['id_categoria']; ?>"><?php echo $categoria['categoria']; ?></option>
                     <?php endforeach ?>
                 </select>
             </div>
@@ -47,6 +47,11 @@ $categorias = seleccionar("SELECT id_categoria, categoria FROM categorias_libros
                 <input type="number" name="stock" class="form-control" required>
             </div>
 
+            <div class="mb-3">
+                <label for="portada" class="form-label">Portada</label>
+                <input type="file" name="portada" class="form-control" accept="image/png, image/webp, image/jpeg">
+            </div>
+
             <div>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary">Guardar</button>
@@ -56,12 +61,13 @@ $categorias = seleccionar("SELECT id_categoria, categoria FROM categorias_libros
     </div>
   </div>
 </div>
+<!--script para limpiar el modal despues de que se cierre-->
 <script>
   const modalInsertar = document.getElementById('modalInsertar');
 
   modalInsertar.addEventListener('hidden.bs.modal', () => {
     const form = modalInsertar.querySelector('form');
-    form.reset(); // clears all fields
+    form.reset(); // limpia todos los campos
   });
 </script>
 

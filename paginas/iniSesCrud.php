@@ -54,10 +54,24 @@ if (isset($_COOKIE["session"]) && $_COOKIE["session"] === "activa") {
                 <small>
                     Nuevo operador?
                     <a href="registro.php">Regístrate!</a><br>
-                    <a href="olvido.php">Olvidaste la contraseña?</a>
+                    <a href="#" onclick="olvidoPassword(event)">¿Olvidaste la contraseña?</a>
                 </small>
             </div>
         </div>
         
+
     </body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function olvidoPassword(e) {
+            e.preventDefault();
+
+            Swal.fire({
+            icon: 'info',
+            title: 'Recuperación de contraseña',
+            text: 'Contacte al administrador del sistema para restablecer su contraseña.',
+            confirmButtonText: 'Entendido'
+            });
+        }
+    </script>
 </html>

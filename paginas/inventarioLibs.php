@@ -1,18 +1,20 @@
 <?php
-//session_start();
-//if(!isset($_SESSION["id"])){
-//  header("Location: iniSesCrud.php");
-//  exit();
-//}
+session_start();
+if(!isset($_SESSION["id"])){
+  header("Location: iniSesCrud.php");
+  exit();
+}
 
 ini_set('display-errors', E_ALL);
 
-include "../config/basededatos.php";
+//include "../config/basededatos.php";
+require_once "../config/neobasededatos.php";
 include "modalInsertar.php";
 include "modalEditar.php";
 include "modalBorrar.php";
 
-$datos = seleccionar("SELECT libros.id_libro, libros.titulo, libros.autor, libros.precio, categorias_libros.categoria AS nombre_categoria, libros.idioma, libros.stock FROM libros join categorias_libros on libros.id_categoria1 = categorias_libros.id_categoria;", "localhost", "libreria_la_ruina", "root", "password");
+
+$datos = seleccionar("SELECT libros.id_libro, libros.titulo, libros.autor, libros.precio, categorias_libros.categoria AS nombre_categoria, libros.idioma, libros.stock FROM libros join categorias_libros on libros.id_categoria1 = categorias_libros.id_categoria;");
 ?>
 
 <!DOCTYPE html>
@@ -72,18 +74,15 @@ $datos = seleccionar("SELECT libros.id_libro, libros.titulo, libros.autor, libro
         <tbody>
           <?php foreach($datos as $dato):?>
           <tr>
-            <td><?php echo $dato[1]?></td>
-            <td><?php echo $dato[2]?></td>
-            <td><?php echo $dato[3]?></td>
-            <td><?php echo $dato[4]?></td>
-            <td><?php echo $dato[5]?></td>
-            <td><?php echo $dato[6]?></td>
+            <td><?php echo $dato['titulo']?></td>
+            <td><?php echo $dato['autor']?></td>
+            <td><?php echo $dato['precio']?></td>
+            <td><?php echo $dato['nombre_categoria']?></td>
+            <td><?php echo $dato['idioma']?></td>
+            <td><?php echo $dato['stock']?></td>
             <td>
-              <a href="#" class="btn btn-warning mx-1" data-bs-toggle="modal" data-bs-target="#modalEditar" data-bs-id="<?php echo $dato[0]?>"
-              data-bs-nombre="<?php echo $dato[1]?>"
-              data-bs-precio="<?php echo $dato[2]?>"
-              data-bs-descripcion="<?php echo $dato[4]?>">Editar</a>
-              <a href="#" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#modalBorrar" data-bs-id="<?php echo $dato[0]?>">Eliminar</a>
+              <a href="#" class="btn btn-warning mx-1 btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar" data-id="<?php echo $dato['id_libro']?>">Editar</a>
+              <a href="#" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#modalBorrar" data-bs-id="<?php echo $dato['id_libro']?>">Eliminar</a>
             </td>
           </tr>
           <?php endforeach?>
@@ -98,25 +97,30 @@ $datos = seleccionar("SELECT libros.id_libro, libros.titulo, libros.autor, libro
   </script>
   <!-- script para obtener los parametros de el campo a modificar TODO: cambiar por un request ajax -->
   <script>
-    modalEditar.addEventListener('shown.bs.modal', event => {
-    let button = event.relatedTarget
-    let id = button.getAttribute('data-bs-id');
-    let nombre = button.getAttribute('data-bs-nombre');
-    let precio = button.getAttribute('data-bs-precio');
-    let categoria = button.getAttribute('data-bs-categoria');
-    let descripcion = button.getAttribute('data-bs-descripcion');
+    document.addEventListener('DOMContentLoaded', () => {
 
-    let inputId = modalEditar.querySelector('.modal-body #id');
-    let inputNombre = modalEditar.querySelector('.modal-body #nombre');
-    let inputPrecio = modalEditar.querySelector('.modal-body #precio');
-    let inputDescripcion = modalEditar.querySelector('.modal-body #descripcion');
+      document.querySelectorAll('.btn-editar').forEach(btn => {
+        btn.addEventListener('click', async () => {
 
-    inputId.value = id;
-    inputNombre.value = nombre;
-    inputPrecio.value = precio;
-    inputDescripcion.value= descripcion;
+          const id = btn.dataset.id;
 
+          try{
+            const res = await fetch(`getLibro.php?id=${id}`);
+            const data = await res.json();
+
+            document.querySelector('#modalEditar input[name="id"]').value = data.id_libro;
+            document.querySelector('#modalEditar input[name="titulo"]').value = data.titulo;
+            document.querySelector('#modalEditar input[name="autor"]').value = data.autor;
+            document.querySelector('#modalEditar input[name="precio"]').value = data.precio;
+            document.querySelector('#modalEditar select[name="categoria"]').value = data.id_categoria1;
+            document.querySelector('#modalEditar input[name="idioma"]').value = data.idioma;
+            document.querySelector('#modalEditar input[name="stock"]').value = data.stock;
+
+          } catch (err){
+            console.error("Error cargando el libro: ", err);
+          }
+        });
+      });
     });
-
   </script>
 </html>

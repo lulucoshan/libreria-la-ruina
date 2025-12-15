@@ -36,8 +36,15 @@
 
   <!-- inicio del cuerpo contenedor de la tabla principal del inventario de la libreria-->
   <body>
+    <div class="justify-content-rigth">
+    <button class="btn btn-warning p-3 m-3" onclick="infoSistema()">
+      Información
+    </button>
+    </div>
+
     <div class="container mt-5">
     <div class="row justify-content-center">
+
 
         <!-- TARJETA 1 -->
         <div class="col-md-3">
@@ -81,5 +88,48 @@
     </div>
 </div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
+  <script>
+function infoSistema() {
+    Swal.fire({
+        title: 'Sistema de Biblioteca "La Ruina"',
+        width: 700,
+        html: `
+            <p>
+                El sistema de la biblioteca <b>La Ruina</b> fue desarrollado con el objetivo
+                de facilitar la gestión y venta de libros disponibles en el establecimiento.
+            </p>
+
+            <h5 class="text-start">Funciones principales</h5>
+            <ul class="text-start">
+                <li>Visualización del inventario de libros disponibles.</li>
+                <li>Registro y control del inventario.</li>
+                <li>Registro de ventas.</li>
+                <li>Impresión de ticket de compra.</li>
+            </ul>
+
+            <h5 class="text-start">Uso del sistema</h5>
+            <p class="text-start">
+                El usuario puede consultar el inventario para conocer título, autor,
+                idioma, precio y cantidad disponible.
+            </p>
+
+            <p class="text-start">
+                Al realizar una venta, el sistema registra la transacción y genera
+                un ticket imprimible para el cliente.
+            </p>
+
+            <h5 class="text-start">Objetivo</h5>
+            <p class="text-start">
+                Optimizar el control del inventario, mejorar el proceso de venta
+                y facilitar la administración de la biblioteca <b>La Ruina</b>.
+            </p>
+        `,
+        icon: 'info',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: '#DDBA3F'
+    });
+}
+</script>
 </html>

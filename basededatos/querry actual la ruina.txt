@@ -2,9 +2,11 @@ CREATE DATABASE libreria_la_ruina;
 
 use libreria_la_ruina;
 
-create table usrs_ruina (cve_usuarios varchar(36) DEFAULT uuid_v7() not null primary key, usr_name varchar(20) unique not null, pswrd varchar(255) not null, rol varchar(6));
+create table usrs_ruina (cve_usuarios varchar(36) DEFAULT uuid_v7() not null primary key, usr_name varchar(20) unique not null, pswrd varchar(255) not null);
+
 
 create table categorias_libros (id_categoria int not null primary key AUTO_INCREMENT, categoria varchar(15));
+
 
 create table libros (
 id_libro varchar(36) DEFAULT uuid_v7() not null primary key,
@@ -16,6 +18,23 @@ idioma varchar (15),
 stock int,
 CONSTRAINT fk_categoria FOREIGN KEY (id_categoria1)
 references categorias_libros(id_categoria)
+);
+
+
+create table ventas (
+id_venta int auto_increment primary key,
+total decimal(10,2) NOT NULL,
+fecha datetime default CURRENT_TIMESTAMP()
+);
+
+drop table venta_detalle;
+create table venta_detalle (
+id_detalle int auto_increment primary key,
+id_venta int,
+id_libro varchar(36),
+cantidad int,
+precio decimal(10,2),
+foreign key (id_venta) references ventas(id_venta)
 );
 
 
@@ -31,7 +50,6 @@ INSERT INTO categorias_libros (categoria) VALUES
 ('Terror'),
 ('Autoayuda');
 
-select * from categorias_libros;
 
 INSERT INTO libros (titulo, autor, precio, id_categoria1, idioma, stock) VALUES
 ('Cien Años de Soledad', 'G. García Márquez', 299.00, 1, 'Español', 12),
@@ -54,8 +72,3 @@ INSERT INTO libros (titulo, autor, precio, id_categoria1, idioma, stock) VALUES
 ('Don Quijote de la Mancha', 'Miguel de Cervantes', 300.00, 1, 'Español', 6),
 ('El Monje que Vendió su Ferrari', 'Robin Sharma', 260.00, 10, 'Español', 12),
 ('Las Aventuras de Tom Sawyer', 'Mark Twain', 150.00, 6, 'Español', 15);
-
-select * from libros;
-SELECT libros.id_libro, libros.titulo, libros.autor, libros.precio, categorias_libros.categoria AS nombre_categoria, libros.idioma, libros.stock FROM libros join categorias_libros on libros.id_categoria1 = categorias_libros.id_categoria;
-
-insert into table libros (titulo, autor, precio, id_categoria1)
