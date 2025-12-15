@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(!isset($_SESSION["id"])){
+  header("Location: iniSesCrud.php");
+  exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="">
   <head>
